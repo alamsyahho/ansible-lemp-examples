@@ -1,0 +1,11 @@
+[webserver]
+web-staging1
+web-staging2
+
+[dbserver]
+db-staging1
+db-staging2
+
+[cacheserver]
+cache-staging1
+cache-staging2

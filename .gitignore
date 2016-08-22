@@ -1,0 +1,27 @@
+.directory
+/vendor
+/node_modules
+.env
+.env.testing
+.idea
+.vagrant
+tests/_output/*
+dirlist.app
+dirlist.cache
+dirlist.vendor
+documents/main
+documents/main/*
+documents/coverage-html
+documents/coverage-html/*
+documents/coverage.xml
+documents/phpunit.xml
+
+resources/assets/js/vendor
+
+# SASS packages #
+resources/assets/sass/components
+
+drop_seeking
+.tags
+_ide_helper.php
+tags

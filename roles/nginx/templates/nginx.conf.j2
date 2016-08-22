@@ -1,0 +1,103 @@
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user  nginx;
+worker_processes  2;
+
+error_log  /var/log/nginx/error.log;
+
+pid        /var/run/nginx.pid;
+
+events {
+    worker_connections  4096;
+    multi_accept on;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$http_x_forwarded_for $remote_addr - $remote_user'
+                      ' [$time_local] "$request" $status $body_bytes_sent'
+                      ' "$http_referer" "$http_user_agent" "$http_host"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    gzip  on;
+    gzip_comp_level 6;
+    gzip_disable "msie6";
+    gzip_types application/json;
+
+    fastcgi_buffers 8 16k;
+    fastcgi_buffer_size 32k;
+
+    # Allow a great many server names
+    server_names_hash_max_size      512;
+    server_names_hash_bucket_size   128;
+
+    # Limit X-Frame-Options
+    add_header X-Frame-Options SAMEORIGIN;
+
+    upstream fpm_dev {
+       server 127.0.0.1:9000;
+    }
+
+    map $http_user_agent $outdated {
+        default                                 0;
+        "~MSIE [1-8]\."                         1;
+        "~Mozilla.*Firefox/[1-9]\."             1;
+        "~Mozilla.*Firefox/1[0-8]\."            1;
+        "~Opera.*Version/[0-9]\."               1;
+        "~Opera.*Version/[0-1][0-9]\."          1;
+        "~Opera.*Version/2[0-1]\."              1;
+        "~AppleWebKit.*Version/[0-4]\..*Safari" 1;
+        "~Chrome/[0-9]\."                       1;
+        "~Chrome/[0-1][0-9]\."                  1;
+        "~Chrome/2[0-5]\."                      1;
+        "~Lynx"                                 1;
+    }
+
+    # Cloudflare
+    set_real_ip_from   199.27.128.0/21;
+    set_real_ip_from   173.245.48.0/20;
+    set_real_ip_from   103.21.244.0/22;
+    set_real_ip_from   103.22.200.0/22;
+    set_real_ip_from   103.31.4.0/22;
+    set_real_ip_from   141.101.64.0/18;
+    set_real_ip_from   108.162.192.0/18;
+    set_real_ip_from   190.93.240.0/20;
+    set_real_ip_from   188.114.96.0/20;
+    set_real_ip_from   197.234.240.0/22;
+    set_real_ip_from   198.41.128.0/17;
+    set_real_ip_from   162.158.0.0/15;
+    set_real_ip_from   104.16.0.0/12;
+    set_real_ip_from   172.64.0.0/13;
+    set_real_ip_from   2400:cb00::/32;
+    set_real_ip_from   2606:4700::/32;
+    set_real_ip_from   2803:f800::/32;
+    set_real_ip_from   2405:b500::/32;
+    set_real_ip_from   2405:8100::/32;
+    real_ip_header     CF-Connecting-IP;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    # set client body size to 16M #
+    client_max_body_size            16M;
+    client_body_buffer_size         16M;
+    client_header_buffer_size       1k;
+
+    # File caching
+    open_file_cache                 max=4096 inactive=20s;
+    open_file_cache_errors          on;
+    open_file_cache_min_uses        2;
+    open_file_cache_valid           30s;
+}

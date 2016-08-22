@@ -1,0 +1,4 @@
+---
+# Default user and group to run php-fpm process
+fpm_user: nginx
+fpm_group: nginx

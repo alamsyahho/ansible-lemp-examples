@@ -1,0 +1,8 @@
+[webserver]
+vagrant.local
+
+[dbserver]
+vagrant.local
+
+[cacheserver]
+vagrant.local

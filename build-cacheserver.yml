@@ -1,0 +1,9 @@
+---
+- name: Install Memcached and Redis
+  hosts: cacheserver
+  remote_user: root
+
+  roles:
+    - common
+    - memcached
+    - redis

@@ -1,0 +1,6 @@
+---
+- name: Install Redis
+  yum: name=redis state=present
+
+- name: start nginx and enable on boot
+  service: name=redis state=started enabled=yes

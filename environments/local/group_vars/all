@@ -1,0 +1,9 @@
+---
+# Set install percona server to false by default
+install_percona_server: false
+
+# Nginx version to install
+os_nginx: centos
+osrelease_nginx: 6
+nginx_version: nginx-1.10.1-1.el6.ngx
+nginx_vhost: example

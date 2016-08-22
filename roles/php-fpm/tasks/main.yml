@@ -1,0 +1,35 @@
+---
+- name: Install webtatic repos
+  yum: name=https://mirror.webtatic.com/yum/el6/latest.rpm state=present
+
+- name: Install php-fpm and deps
+  yum: name={{ item }} state=present
+  with_items:
+    - httpd
+    - mod_ssl
+    - php56w-bcmath
+    - php56w-mcrypt
+    - php56w-tidy
+    - php56w-mysql
+    - php56w-gd
+    - php56w-imap
+    - php56w-mbstring
+    - php56w-odbc
+    - php56w-pear
+    - php56w-intl
+    - php56w-soap
+    - php56w-xml
+    - php56w-xmlrpc
+    - php56w-pecl-apcu
+    - php56w-pecl-igbinary
+    - php56w-pecl-imagick
+    - php56w-pecl-memcache
+    - php56w-pecl-memcached
+    - php56w-fpm
+
+- name: Update default pool www.conf
+  template: src=www.conf dest=/etc/php-fpm.d/www.conf
+  notify: reload php-fpm
+
+- name: start php-fpm and enable on boot
+  service: name=php-fpm state=started enabled=yes

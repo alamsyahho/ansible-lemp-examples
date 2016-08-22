@@ -1,0 +1,6 @@
+---
+# Set install percona server to false by default
+install_percona_server: false
+
+# my.cnf config
+mysql_port: 3306

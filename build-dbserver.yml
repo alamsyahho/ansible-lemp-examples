@@ -1,0 +1,10 @@
+---
+- name: Install Percona MySQL Server
+  hosts: dbserver
+  remote_user: root
+
+  roles:
+    - common
+    # if install_percona_server is not defined in group_vars, can optionally define it in here
+    #- { role: percona, install_percona_server: true }
+    - percona
