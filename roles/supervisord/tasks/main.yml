@@ -1,0 +1,19 @@
+---
+- name: install python-pip
+  yum: name=python-pip state=present
+
+- name: install supervisord and its dependencies
+  pip: name={{ item.name }} version={{ item.version}}
+  with_items:
+    - { name: 'meld3' , version: '1.0.0' }
+    - { name: 'supervisor' , version: '3.3.1' }
+
+- name: copy supervisord init script
+  template: src=supervisord.j2 dest=/etc/init.d/supervisord mode=0755
+
+- name: create supervisord log directory
+  file: path=/var/log/supervisor state=directory mode=0755
+
+- name: copy supervisord main config
+  template: src=supervisord.conf.j2 dest=/etc/supervisord.conf
+  notify: restart supervisord
