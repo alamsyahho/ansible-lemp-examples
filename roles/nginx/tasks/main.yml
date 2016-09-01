@@ -8,6 +8,12 @@
 - name: start nginx and enable on boot
   service: name=nginx state=started enabled=yes
 
+- name: install monit
+  yum: name=monit state=present
+
+- name: start monit and enable on boot
+  service: name=monit state=started enabled=yes
+
 - name: copy nginx main config
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
   notify: reload nginx
